@@ -130,9 +130,13 @@ if __name__ == "__main__":
 
 		rowNum = getRowNum(table)
 		for i in range(0, rowNum):
-			limit = rowNum - i
+			limit = rowNum - i - 1
 			for column in columns:
 				print "\n\n[*] The values in column ('{0}') : ".format(column)
 				string = getStringFromColumn(column, table, limit=str(limit))
 
 				print string
+
+# chopper's location is 4c4f485f485553547b50315f316e6b5f48617a6172647d
+# decode it
+# the flag is LOH_HUST{P1_1nk_Hazard}
