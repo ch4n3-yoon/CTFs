@@ -128,9 +128,11 @@ if __name__ == "__main__":
 		print "[*] Columns of table ('{0}'): ".format(table)
 		columns = getColumns('column_name', 'information_schema.columns', "table_name='{0}'".format(table))
 
-		for i in range(0, getRowNum(table)):
+		rowNum = getRowNum(table)
+		for i in range(0, rowNum):
+			limit = rowNum - i
 			for column in columns:
 				print "\n\n[*] The values in column ('{0}') : ".format(column)
-				string = getStringFromColumn(column, table, limit=str(i))
+				string = getStringFromColumn(column, table, limit=str(limit))
 
 				print string
