@@ -1,0 +1,49 @@
+<html>
+<head>
+    <title>{{title}}</title>
+    <script src="/static/jquery-3.2.1.min.js"></script>
+    <script>
+	// how do you want to do this?
+	$(document).ready(function () {
+		$("#roll").click(function () {
+			var dice = $("#dice").val();
+			$("#result").text("");
+			
+			$.post("/roll", {expr: dice}, function (result) {
+				if (result.error) {
+					$("#result").text(result.error);
+				} else {
+					$("#result").text(result.value);
+				}
+			}).fail(function () {
+				$("#result").text("error happened");
+			});
+		});
+	});
+    </script>
+</head>
+<body>
+<h1># {{h1}}</h1>
+<input id="dice" type="text" value="d20" />
+<input id="roll" type="submit" value="roll">
+<pre id="result">
+</pre>
+<hr />
+<pre>
+Examples:
+	d20 + 5
+	advantage(d20) // roll twice, pick the highest
+	advantage(d20+roll(d4)) == advantage(d20) + d4  // bless
+	d100+d10 // d%
+	8*d6 <!-- fireball! -->
+	d12+7
+	d8+3*d6+5
+	advantage(2d6+3)
+	advantage(d20,3) // triple advantage. roll three times pick highest
+	disadvantage(d20)
+
+
+[<a href="/static/source.tar.gz">Source</a>]
+</pre>
+</body>
+</html>
